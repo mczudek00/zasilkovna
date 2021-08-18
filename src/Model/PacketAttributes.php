@@ -75,6 +75,11 @@ class PacketAttributes implements IModel
     /** @var string */
     private $customerBarcode;
 
+    /** @var Size */
+    private $size;
+
+    /** @var string */
+    private $note;
 
     /**
      * PacketAttributes constructor.
@@ -100,6 +105,8 @@ class PacketAttributes implements IModel
      * @param $carrierService
      * @param $dispatchOrder
      * @param $customerBarcode
+     * @param $note
+     * @param $size
      */
     public function __construct(
         $number,
@@ -123,7 +130,9 @@ class PacketAttributes implements IModel
         $carrierPickupPoint = null,
         $carrierService = null,
         $dispatchOrder = null,
-        $customerBarcode = null
+        $customerBarcode = null,
+        $note = null,
+        $size = null
     )
     {
         $this->number = $number;
@@ -149,6 +158,8 @@ class PacketAttributes implements IModel
         $this->carrierService = $carrierService;
         $this->dispatchOrder = $dispatchOrder;
         $this->customerBarcode = $customerBarcode;
+        $this->note = $note;
+        $this->size = $size;
     }
 
     /**
@@ -309,6 +320,22 @@ class PacketAttributes implements IModel
     public function setCarrierService($carrierService)
     {
         $this->carrierService = $carrierService;
+    }
+
+    /**
+     * @param $note
+     */
+    public function setNote($note)
+    {
+        $this->note = $note;
+    }
+
+    /**
+     * @param Size $size
+     */
+    public function setSize(Size $size)
+    {
+        $this->size = $size;
     }
 
     /**
@@ -488,10 +515,34 @@ class PacketAttributes implements IModel
     }
 
     /**
+     * @return string
+     */
+    public function getNote()
+    {
+        return $this->note;
+    }
+
+    /**
+     * @return Size
+     */
+    public function getSize()
+    {
+        return $this->size;
+    }
+
+    /**
      * @return array
      */
     public function toArray()
     {
-        return get_object_vars($this);
+        $array = [];
+        foreach (get_object_vars($this) as $key => $value) {
+            if (is_object($value)) {
+                $array[$key] = $value->toArray();
+            } else {
+                $array[$key] = $value;
+            }
+        }
+        return $array;
     }
 }
